@@ -60,3 +60,27 @@ table {
 
 }
 `
+const STATUS_COLORS = {
+    yellow: 'yellow-500',
+    green:  'green-500',
+    red: 'red-500',
+} as const
+
+
+interface StatusProps {
+    statusColor: keyof typeof STATUS_COLORS //this declariton creates an interface with the types accordingly to the object STATUS_COLORS
+}
+
+export const Status = styled.span<StatusProps>`
+display: flex;
+align-items: center;
+gap: 0.5rem;
+
+&::before {      //before e after sao comandos para colocar o styling antes ou depois do conteudo do elemento HTML, nesse caso o span
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: ${(props)=> props.theme[STATUS_COLORS[props.statusColor]]}
+}
+`
