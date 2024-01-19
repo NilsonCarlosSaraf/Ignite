@@ -72,6 +72,7 @@ export function Home() {
       task: data.task,
       minutesAmount: data.minutesAmount,
       startDate: new Date(),
+      interruptedDate: Date,
     };
 
     setCycles((state) => [...state, newCycle]); //makes the use state update instantly
@@ -79,6 +80,20 @@ export function Home() {
     setAmountSecondsPassed(0);
 
     reset();
+  }
+
+  function handleInterruptCycle() {
+    setActiveCycleId(null);
+
+    setCycles(
+      cycles.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return { ...cycle, interruptedDate: new Date() };
+        } else {
+          return cycle;
+        }
+      })
+    );
   }
 
   const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0;
@@ -100,6 +115,8 @@ export function Home() {
 
   const task = watch("task");
   const isSubmitDisabled = !task;
+
+  console.log(cycles);
 
   return (
     <HomeContainer>
@@ -145,7 +162,7 @@ export function Home() {
         </CountdownContainer>
 
         {activeCycle ? (
-          <StopCountdownButton type="button">
+          <StopCountdownButton onClick={handleInterruptCycle} type="button">
             <HandPalm size={24} />
             Interromper
           </StopCountdownButton>
