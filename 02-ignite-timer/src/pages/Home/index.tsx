@@ -31,6 +31,7 @@ interface Cycle {
   task: string;
   minutesAmount: number;
   startDate: Date;
+  interruptedDate?: Date;
 }
 
 export function Home() {
@@ -72,7 +73,6 @@ export function Home() {
       task: data.task,
       minutesAmount: data.minutesAmount,
       startDate: new Date(),
-      interruptedDate: Date,
     };
 
     setCycles((state) => [...state, newCycle]); //makes the use state update instantly
