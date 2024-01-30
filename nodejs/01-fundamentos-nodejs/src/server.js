@@ -1,5 +1,6 @@
 //const http = require('http') padrao de importacao CommonJS => utiliza o require(padrao mais antigo e pouco utilizado)
 import http from 'node:http' //importacao atraves de ESMODULES
+import { json } from './middlewares/json.js'
 
 
 // GET => Buscar um recurso do back-end
@@ -15,21 +16,10 @@ const users = []
 const server = http.createServer(async (req, res) => {
     const { method, url } = req
 
-    const buffers = []
-
-    for await (const chunk of req) {
-        buffers.push(chunk)
-    }
-
-    try {
-        req.body = JSON.parse(Buffer.concat(buffers).toString()) //JSON.parse() tranforma a requisicao em um objeto
-    } catch {
-        req.body = null
-    }
+    await json(req, res)
 
     if (method === 'GET' && url === '/users') {
         return res
-            .setHeader('Content-type', 'application/json')
             .end(JSON.stringify(users))
     }
 
