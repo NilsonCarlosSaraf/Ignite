@@ -1,6 +1,7 @@
 //const http = require('http') padrao de importacao CommonJS => utiliza o require(padrao mais antigo e pouco utilizado)
 import http from 'node:http' //importacao atraves de ESMODULES
 import { json } from './middlewares/json.js'
+import { Database } from './database.js'
 
 
 // GET => Buscar um recurso do back-end
@@ -11,7 +12,9 @@ import { json } from './middlewares/json.js'
 
 // Cabecalhos (Requisicao/resposta) => Metadados / da informacoes de como o dado pode/deve ser interpretado pelo front end
 
-const users = []
+const database = new Database()
+
+database.database
 
 const server = http.createServer(async (req, res) => {
     const { method, url } = req
@@ -19,18 +22,21 @@ const server = http.createServer(async (req, res) => {
     await json(req, res)
 
     if (method === 'GET' && url === '/users') {
-        return res
-            .end(JSON.stringify(users))
+        const users = database.select('users')
+
+        return res.end(JSON.stringify(users))
     }
 
     if (method === 'POST' && url === '/users') {
         const { name, email } = req.body
 
-        users.push({
+        const user = {
             id: 1,
             name,
             email,
-        })
+        }
+
+        database.insert('users', user)
 
         return res.writeHead(201).end()
     }
