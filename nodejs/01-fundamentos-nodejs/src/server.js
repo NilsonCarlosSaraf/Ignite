@@ -14,8 +14,6 @@ import { Database } from './database.js'
 
 const database = new Database()
 
-database.database
-
 const server = http.createServer(async (req, res) => {
     const { method, url } = req
 
