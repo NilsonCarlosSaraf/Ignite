@@ -36,7 +36,11 @@ export const routes = [
         method: 'DELETE',
         path: buildRoutePath('/users/:id'), //toda vez que voce tiver ":" no caminho da rota significa que o parametro sera dinamico
         handler: (req, res) => {
-            return res.end()
+            const { id } = req.params
+
+            database.delete('users', id)
+
+            return res.writeHead(204).end()
         },
 
     }
