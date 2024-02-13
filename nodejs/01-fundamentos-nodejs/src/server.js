@@ -3,6 +3,7 @@ import http from 'node:http' //importacao atraves de ESMODULES
 
 import { json } from './middlewares/json.js'
 import { routes } from './routes.js'
+import { extractQueryParams } from './utils/extract-query-params.js'
 
 
 // GET => Buscar um recurso do back-end
@@ -25,7 +26,10 @@ const server = http.createServer(async (req, res) => {
     if (route) {
         const routeParams = req.url.match(route.path)
 
-        req.params = { ...routeParams.groups }
+        const { query, ...params } = routeParams.groups
+
+        req.params = params
+        req.query = query ? extractQueryParams(query) : {}
 
 
 
