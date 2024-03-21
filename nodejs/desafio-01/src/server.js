@@ -1,23 +1,31 @@
+import { randomUUID } from 'node:crypto'
 import http from 'node:http'
+import { Database } from './database.js'
 
-const tasks = []
+// const tasks = []
+
+const database = new Database()
 
 const server = http.createServer((req, res) => {
     const { method, url } = req
 
     if (method === 'GET' && url === '/tasks') {
+        const tasks = database.select('tasks')
+
         return res.setHeader('Content-type', 'application/json')
             .end(JSON.stringify(tasks))
     }
 
     if (method === 'POST' && url === '/tasks') {
-        tasks.push({
-            id: 1,
-            title: 'Lavar louca',
-            description: 'lavar a louca...',
+        const task = {
+            id: randomUUID(),
+            title: 'Estudar',
+            description: 'estudar...',
             completed_at: new Date(),
             updated_at: new Date()
-        })
+        }
+
+        database.insert('tasks', task)
 
         return res.end('Tarefa criada com sucesso')
     }
