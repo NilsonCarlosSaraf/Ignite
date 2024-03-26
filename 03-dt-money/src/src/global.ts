@@ -19,7 +19,7 @@ body {
     -webkit-font-smoothing: antialiased; //faz as fontes ficarem masi definidas
 }
 
-border-style, animation-iteration-count, textarea, button {
+body, input, textarea, button {
     font: 400 1rem Roboto, sans-serif;
 }
 `
